@@ -97,7 +97,7 @@ class PlgUserPassword extends JPlugin
 
 		$db = JFactory::getDBO();
 
-		if ($data->lastvisitDate == $db->getNullDate())
+		if (isset($data->lastvisitDate) == $db->getNullDate())
 		{
 			$form->setFieldAttribute('password1', 'required', 'true');
 			$form->setFieldAttribute('password2', 'required', 'true');

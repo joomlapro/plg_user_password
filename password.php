@@ -55,28 +55,6 @@ class PlgUserPassword extends JPlugin
 			return false;
 		}
 
-		// If the user is blocked, redirect with an error
-		if ($instance->get('block') == 1)
-		{
-			JError::raiseWarning('SOME_ERROR_CODE', JText::_('JERROR_NOLOGIN_BLOCKED'));
-			return false;
-		}
-
-		// Authorise the user based on the group information
-		if (!isset($options['group']))
-		{
-			$options['group'] = 'USERS';
-		}
-
-		// Check the user can login.
-		$result	= $instance->authorise($options['action']);
-
-		if (!$result)
-		{
-			JError::raiseWarning(401, JText::_('JERROR_LOGIN_DENIED'));
-			return false;
-		}
-
 		// Mark the user as logged in
 		$instance->set('guest', 0);
 
@@ -121,37 +99,6 @@ class PlgUserPassword extends JPlugin
 			return $instance;
 		}
 
-		// TODO: move this out of the plugin
-		$config	= JComponentHelper::getParams('com_users');
-
-		// Default to Registered.
-		$defaultUserGroup = $config->get('new_usertype', 2);
-
-		$instance->set('id', 0);
-		$instance->set('name', $user['fullname']);
-		$instance->set('username', $user['username']);
-		$instance->set('password_clear', $user['password_clear']);
-
-		// Result should contain an email (check)
-		$instance->set('email', $user['email']);
-		$instance->set('groups', array($defaultUserGroup));
-
-		// If autoregister is set let's register the user
-		$autoregister = isset($options['autoregister']) ? $options['autoregister'] :  $this->params->get('autoregister', 1);
-
-		if ($autoregister)
-		{
-			if (!$instance->save())
-			{
-				return JError::raiseWarning('SOME_ERROR_CODE', $instance->getError());
-			}
-		}
-		else
-		{
-			// No existing user and autoregister off, this is a temporary user.
-			$instance->set('tmp_user', true);
-		}
-
-		return $instance;
+		return false;
 	}
 }

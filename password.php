@@ -76,6 +76,32 @@ class PlgUserPassword extends JPlugin
 	}
 
 	/**
+	* Called before a JForm is rendered.
+	*
+	* It can be used to modify the JForm object in memory before rendering.
+	*
+	 * @param   JForm  $form  The form to be altered.
+	 * @param   array  $data  The associated data for the form.
+	 *
+	 * @return  boolean
+	 *
+	 * @since   3.20
+	 */
+	public function onContentPrepareForm($form, $data)
+	{
+		if (!($form instanceof JForm))
+		{
+			$this->_subject->setError('JERROR_NOT_A_FORM');
+			return false;
+		}
+
+		$form->setFieldAttribute('password1', 'required', 'true');
+		$form->setFieldAttribute('password2', 'required', 'true');
+
+		return true;
+	}
+
+	/**
 	 * This method will return a user object
 	 *
 	 * If options['autoregister'] is true, if the user doesn't exist yet he will be created
